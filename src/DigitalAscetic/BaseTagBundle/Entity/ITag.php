@@ -11,7 +11,9 @@ namespace DigitalAscetic\BaseTagBundle\Entity;
 
 interface ITag
 {
-     public function getName(): string ;
+    public function getTagName(): string;
 
-     public function getTagId(): int ;
+    public function getTagHexColor(): int;
+
+    public function getObjectClass(): ?string;
 }
