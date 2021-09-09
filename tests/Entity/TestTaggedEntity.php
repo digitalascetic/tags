@@ -6,7 +6,7 @@
  * Time: 09:47
  */
 
-namespace DigitalAscetic\BaseEntityBundle\Test\Entity;
+namespace DigitalAscetic\BaseTagBundle\Test\Entity;
 
 /**
  * Class TestTaggedEntity

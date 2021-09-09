@@ -18,7 +18,7 @@
   "autoload-dev": {
     "psr-4": {
       "": "src/",
-      "DigitalAscetic\\TagsBundle\\Test\\": "tests/"
+      "DigitalAscetic\\BaseTagBundle\\Test\\": "tests/"
     },
     "files": [
       "tests/Functional/AppKernel.php"
