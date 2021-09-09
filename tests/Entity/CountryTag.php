@@ -9,6 +9,8 @@
 namespace DigitalAscetic\BaseTagBundle\Test\Entity;
 
 
+use DigitalAscetic\BaseTagBundle\Entity\TaggableTrait;
+
 /**
  * Class CountryTag
  * @package DigitalAscetic\BaseEntityBundle\Test\Entity
@@ -17,6 +19,7 @@ namespace DigitalAscetic\BaseTagBundle\Test\Entity;
  */
 class CountryTag
 {
+    use TaggableTrait;
 
     /**
      * @var string
