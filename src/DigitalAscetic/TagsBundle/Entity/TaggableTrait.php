@@ -13,18 +13,19 @@ trait TaggableTrait
      */
     private $tags;
 
-    /**
-     * @return string[]|null
-     */
     public function getTags(): ?array
     {
-        return json_decode($this->tags);
+        return json_decode($this->tags, true);
     }
 
 
     public function hasTag(ITag $tag): bool
     {
         $tags = $this->getTags();
+
+        if (empty($tags)) {
+            return false;
+        }
 
         return array_key_exists($tag->getId(), $tags);
     }

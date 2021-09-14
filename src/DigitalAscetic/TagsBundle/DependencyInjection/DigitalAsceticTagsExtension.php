@@ -30,6 +30,7 @@ class DigitalAsceticTagsExtension extends Extension implements PrependExtensionI
             $tagManager->addArgument(new Reference('doctrine.orm.entity_manager'));
             $tagManager->addArgument($config['tags_relations_indexed']);
             $container->setDefinition(TagManager::SERVICE_NAME, $tagManager);
+            $container->setAlias(TagManager::class, TagManager::SERVICE_NAME);
             $container->setAlias(TagManagerInterface::class, TagManager::class);
         }
     }

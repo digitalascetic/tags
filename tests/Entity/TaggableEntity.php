@@ -17,10 +17,27 @@ use Doctrine\ORM\Mapping as ORM;
  * Class CountryTag
  * @package DigitalAscetic\BaseEntityBundle\Test\Entity
  *
+ * @ORM\Table(name="taggable")
  * @ORM\Entity()
  */
 class TaggableEntity implements ITaggable
 {
     use TaggableTrait;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }

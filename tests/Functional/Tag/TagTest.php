@@ -1,9 +1,9 @@
 <?php
 
-namespace DigitalAscetic\TagsBundle\Test\Functional;
+namespace DigitalAscetic\TagsBundle\Test\Functional\Tag;
 
 use DigitalAscetic\TagsBundle\Model\ITaggable;
-use DigitalAscetic\TagsBundle\Service\TagManager;
+use DigitalAscetic\TagsBundle\Service\TagManagerInterface;
 use DigitalAscetic\TagsBundle\Test\Entity\Tag;
 use DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +15,7 @@ class TagTest extends KernelTestCase
     /** @var EntityManagerInterface */
     private $em;
 
-    /** @var TagManager */
+    /** @var TagManagerInterface */
     private $tagManager;
 
     /** @var ITaggable */
@@ -28,9 +28,13 @@ class TagTest extends KernelTestCase
 
         self::bootKernel();
 
+        $this->importDatabaseSchema();
+
         $this->em = static::$kernel->getContainer()
             ->get('doctrine')
             ->getManager();
+
+        $this->tagManager = static::$kernel->getContainer()->get(TagManagerInterface::class);
     }
 
     protected function tearDown(): void
@@ -42,14 +46,7 @@ class TagTest extends KernelTestCase
 
     }
 
-    public static function setUpBeforeClass(): void
-    {
-        parent::setUpBeforeClass();
-        self::bootKernel();
-        self::importDatabaseSchema();
-    }
-
-    protected static function importDatabaseSchema()
+    protected function importDatabaseSchema()
     {
         $em = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
         $metadata = $em->getMetadataFactory()->getAllMetadata();
@@ -76,13 +73,16 @@ class TagTest extends KernelTestCase
         $this->em->persist($tag);
         $this->em->flush();
 
+        $this->assertEquals(1, $tag->getId());
+
         $taggable = new TaggableEntity();
-        $this->tagManager->packTag($taggable, $tag);
+        $this->tagManager->packTags($taggable, [$tag]);
         $this->em->persist($taggable);
         $this->em->flush();
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
+        $this->assertEquals('Tag1', array_values($taggable->getTags())[0]);
     }
 
     public function testRemoveTag()
@@ -92,12 +92,12 @@ class TagTest extends KernelTestCase
         $this->em->flush();
 
         $taggable = new TaggableEntity();
-        $this->tagManager->packTag($taggable, $tag);
+        $this->tagManager->packTags($taggable, [$tag]);
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
 
-        $this->tagManager->removeTag($taggable, $tag);
+        $this->tagManager->unPackTags($taggable, [$tag]);
 
         $this->assertEmpty($taggable->getTags());
     }

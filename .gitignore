@@ -3,3 +3,4 @@ tags.iml
 vendor
 .gemfury
 package.zip
+/.phpunit.result.cache

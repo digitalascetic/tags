@@ -10,7 +10,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('ascetic_base_tag');
+        $rootNode = $treeBuilder->root('digital_ascetic_tags');
 
         $rootNode
             ->canBeEnabled()
