@@ -13,8 +13,12 @@ trait TaggableTrait
      */
     private $tags;
 
-    public function getTags(): ?array
+    public function getTags(): array
     {
+        if (is_null($this->tags)) {
+            return [];
+        }
+
         return json_decode($this->tags, true);
     }
 
@@ -27,7 +31,7 @@ trait TaggableTrait
             return false;
         }
 
-        return array_key_exists($tag->getId(), $tags);
+        return in_array($tag->getId(), $tags);
     }
 
     public function addTag(ITag $tag): void
@@ -35,7 +39,7 @@ trait TaggableTrait
         $tags = $this->getTags();
 
         if (!$this->hasTag($tag)) {
-            $tags[$tag->getId()] = $tag->getTagName();
+            array_push($tags, $tag->getId());
         }
 
         $this->tags = json_encode($tags);
@@ -46,7 +50,8 @@ trait TaggableTrait
         $tags = $this->getTags();
 
         if ($this->hasTag($tag)) {
-            unset($tags[$tag->getId()]);
+            $tagIndex = array_search($tag->getId(), $tags);
+            unset($tags[$tagIndex]);
         }
 
         $this->tags = json_encode($tags);

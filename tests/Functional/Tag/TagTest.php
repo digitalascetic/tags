@@ -32,10 +32,10 @@ class TagTest extends BaseTagTest
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
-        $this->assertEquals('Tag1', array_values($taggable->getTags())[0]);
+        $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
     }
 
-    public function testRemoveTag()
+    public function testClearTags()
     {
         $tag = $this->createTag('Tag2');
         $this->em->persist($tag);
@@ -49,11 +49,35 @@ class TagTest extends BaseTagTest
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
-        $this->assertEquals('Tag2', array_values($taggable->getTags())[0]);
+        $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
 
         $this->tagManager->unPackTags($taggable, [$tag]);
 
         $this->assertEmpty($taggable->getTags());
+    }
+
+    public function testRemoveTag()
+    {
+        $tag = $this->createTag('Tag1');
+        $this->em->persist($tag);
+        $tag2 = $this->createTag('Tag2');
+        $this->em->persist($tag2);
+        $this->em->flush();
+
+        $taggable = new TaggableEntity();
+        $this->em->persist($taggable);
+        $this->em->flush();
+
+        $this->tagManager->packTags($taggable, [$tag, $tag2]);
+
+        $this->assertNotNull($taggable->getTags());
+        $this->assertEquals(2, count($taggable->getTags()));
+        $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
+
+        $this->tagManager->unPackTags($taggable, [$tag]);
+
+        $this->assertEquals(1, count($taggable->getTags()));
+        $this->assertEquals($tag2->getId(), array_values($taggable->getTags())[0]);
     }
 
     public function createTagWithCategory()
