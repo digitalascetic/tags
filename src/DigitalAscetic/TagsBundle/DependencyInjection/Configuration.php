@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('mapping_dir')->defaultValue('%kernel.root_dir%/../vendor/digitalascetic/tags/src/DigitalAscetic/TagsBundle/Entity')->end()
                         ->arrayNode('tag')
                             ->children()
-                                ->scalarNode('class_name')->cannotBeEmpty()->end()
+                                ->scalarNode('class_name')->isRequired()->end()
                                 ->scalarNode('property_id')->defaultValue('id')->end()
                             ->end()
                         ->end()

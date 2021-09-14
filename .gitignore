@@ -4,3 +4,4 @@ vendor
 .gemfury
 package.zip
 /.phpunit.result.cache
+*.log

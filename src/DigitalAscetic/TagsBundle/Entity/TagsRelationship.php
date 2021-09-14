@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class TagsRelationship
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var ITag
      */
     private $tag;
@@ -25,7 +34,7 @@ class TagsRelationship
 
     /**
      * @var string
-     * @ORM\Column(name="object_id", type="string", nullable=false)
+     * @ORM\Column(name="object_class", type="string", nullable=false)
      */
     private $objectClass;
 
@@ -39,6 +48,14 @@ class TagsRelationship
         $this->tag = $tag;
         $this->objectId = $objectId;
         $this->objectClass = $objectClass;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
