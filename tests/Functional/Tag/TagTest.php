@@ -55,4 +55,14 @@ class TagTest extends BaseTagTest
 
         $this->assertEmpty($taggable->getTags());
     }
+
+    public function createTagWithCategory()
+    {
+        $tag = $this->createTag('Tag3');
+        $tag->setCategory(TaggableEntity::class);
+        $this->em->persist($tag);
+        $this->em->flush();
+
+        $this->assertEquals(TaggableEntity::class, $tag->getCategory());
+    }
 }
