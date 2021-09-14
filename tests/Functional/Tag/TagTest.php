@@ -28,7 +28,7 @@ class TagTest extends BaseTagTest
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->tagManager->packTags($taggable, [$tag]);
+        $this->tagManager->packTags($taggable, [$tag], false);
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
@@ -45,13 +45,13 @@ class TagTest extends BaseTagTest
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->tagManager->packTags($taggable, [$tag]);
+        $this->tagManager->packTags($taggable, [$tag], false);
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
         $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
 
-        $this->tagManager->unPackTags($taggable, [$tag]);
+        $this->tagManager->unPackTags($taggable, [$tag], false);
 
         $this->assertEmpty($taggable->getTags());
     }
@@ -68,13 +68,13 @@ class TagTest extends BaseTagTest
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->tagManager->packTags($taggable, [$tag, $tag2]);
+        $this->tagManager->packTags($taggable, [$tag, $tag2], false);
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(2, count($taggable->getTags()));
         $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
 
-        $this->tagManager->unPackTags($taggable, [$tag2]);
+        $this->tagManager->unPackTags($taggable, [$tag2], false);
 
         $this->assertEquals(1, count($taggable->getTags()));
         $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
