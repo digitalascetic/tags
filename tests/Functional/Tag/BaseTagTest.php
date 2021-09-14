@@ -54,6 +54,6 @@ abstract class BaseTagTest extends KernelTestCase
 
     protected function createTag(string $tagName): Tag
     {
-        return new Tag($tagName, '000000');
+        return new Tag($tagName);
     }
 }

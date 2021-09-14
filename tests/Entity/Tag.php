@@ -26,13 +26,11 @@ class Tag implements ITag
 
     /**
      * @param string $tagName
-     * @param string $tagHexColor
      * @param string|null $category
      */
-    public function __construct(string $tagName, string $tagHexColor, string $category = null)
+    public function __construct(string $tagName, string $category = null)
     {
         $this->tagName = $tagName;
-        $this->tagHexColor = $tagHexColor;
         $this->category = $category;
     }
 
