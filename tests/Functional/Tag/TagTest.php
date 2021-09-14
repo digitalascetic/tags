@@ -74,10 +74,10 @@ class TagTest extends BaseTagTest
         $this->assertEquals(2, count($taggable->getTags()));
         $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
 
-        $this->tagManager->unPackTags($taggable, [$tag]);
+        $this->tagManager->unPackTags($taggable, [$tag2]);
 
         $this->assertEquals(1, count($taggable->getTags()));
-        $this->assertEquals($tag2->getId(), array_values($taggable->getTags())[0]);
+        $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
     }
 
     public function createTagWithCategory()
