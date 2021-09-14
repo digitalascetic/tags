@@ -19,7 +19,7 @@ class TagRelationshipTest extends BaseTagTest
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->tagManager->packTags($taggable, [$tag], true);
+        $this->tagManager->packTags($taggable, [$tag]);
 
         /** @var TagsRelationship $tagRelation */
         $tagRelation = $this->em->getRepository(TagsRelationship::class)->findOneBy(['tag' => $tag]);
@@ -41,9 +41,9 @@ class TagRelationshipTest extends BaseTagTest
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->tagManager->packTags($taggable, [$tag], true);
+        $this->tagManager->packTags($taggable, [$tag]);
 
-        $this->tagManager->unPackTags($taggable, [$tag], true);
+        $this->tagManager->unPackTags($taggable, [$tag]);
 
         /** @var TagsRelationship $tagRelation */
         $tagRelation = $this->em->getRepository(TagsRelationship::class)->findOneBy(['tag' => $tag]);
@@ -68,8 +68,8 @@ class TagRelationshipTest extends BaseTagTest
 
         $this->em->flush();
 
-        $this->tagManager->packTags($taggable1, [$tag1, $tag2], true);
-        $this->tagManager->packTags($taggable2, [$tag2], true);
+        $this->tagManager->packTags($taggable1, [$tag1, $tag2]);
+        $this->tagManager->packTags($taggable2, [$tag2]);
 
         $resultTag1 = $this->tagManager->findByTag($tag1);
 

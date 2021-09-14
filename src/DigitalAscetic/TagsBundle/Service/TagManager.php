@@ -29,7 +29,7 @@ class TagManager implements TagManagerInterface
         $this->config = $config;
     }
 
-    public function packTags(ITaggable $taggable, array $tags, bool $indexed = false): void
+    public function packTags(ITaggable $taggable, array $tags, bool $indexed = true): void
     {
         foreach ($tags as $tag) {
             $taggable->addTag($tag);
@@ -43,7 +43,7 @@ class TagManager implements TagManagerInterface
         $this->em->flush();
     }
 
-    public function unPackTags(ITaggable $taggable, array $tags, bool $indexed = false): void
+    public function unPackTags(ITaggable $taggable, array $tags, bool $indexed = true): void
     {
         foreach ($tags as $tag) {
             $taggable->removeTag($tag);
