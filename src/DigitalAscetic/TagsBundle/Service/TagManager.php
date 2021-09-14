@@ -29,12 +29,12 @@ class TagManager implements TagManagerInterface
         $this->config = $config;
     }
 
-    public function packTags(ITaggable $taggable, array $tags): void
+    public function packTags(ITaggable $taggable, array $tags, bool $indexed = false): void
     {
         foreach ($tags as $tag) {
             $taggable->addTag($tag);
 
-            if ($this->isTagRelationshipEnabled()) {
+            if ($this->isTagRelationshipEnabled() && $indexed) {
                 $this->addTagRelationship($taggable, $tag);
             }
         }
@@ -43,12 +43,12 @@ class TagManager implements TagManagerInterface
         $this->em->flush();
     }
 
-    public function unPackTags(ITaggable $taggable, array $tags): void
+    public function unPackTags(ITaggable $taggable, array $tags, bool $indexed = false): void
     {
         foreach ($tags as $tag) {
             $taggable->removeTag($tag);
 
-            if ($this->isTagRelationshipEnabled()) {
+            if ($this->isTagRelationshipEnabled() && $indexed) {
                 $this->removeTagRelationship($taggable, $tag);
             }
         }

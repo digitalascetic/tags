@@ -54,7 +54,6 @@ doctrine:
 digital_ascetic_tags:
   enabled: true
   tags_relations_indexation:
-    enabled: true
     mapping_dir: '%kernel.root_dir%/../../src/DigitalAscetic/TagsBundle/Entity'
     tag:
       class_name: 'DigitalAscetic\TagsBundle\Test\Entity\Tag'

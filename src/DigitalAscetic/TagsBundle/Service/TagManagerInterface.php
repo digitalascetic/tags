@@ -11,14 +11,16 @@ interface TagManagerInterface
     /**
      * @param ITaggable $taggable
      * @param ITag[] $tags
+     * @param bool $indexed
      */
-    public function packTags(ITaggable $taggable, array $tags): void;
+    public function packTags(ITaggable $taggable, array $tags, bool $indexed = false): void;
 
     /**
      * @param ITaggable $taggable
      * @param ITag[] $tags
+     * @param bool $indexed
      */
-    public function unPackTags(ITaggable $taggable, array $tags): void;
+    public function unPackTags(ITaggable $taggable, array $tags, bool $indexed = false): void;
 
     /**
      * @param ITag $tag
