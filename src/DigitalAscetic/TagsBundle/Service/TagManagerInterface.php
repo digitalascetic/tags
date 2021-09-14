@@ -23,7 +23,7 @@ interface TagManagerInterface
     /**
      * @param ITag $tag
      * @param string|null $category
-     * @return TagQueryResult[]
+     * @return TagQueryResult
      */
-    public function findByTag(ITag $tag, string $category = null): array;
+    public function findByTag(ITag $tag, string $category = null): TagQueryResult;
 }

@@ -5,34 +5,39 @@ namespace DigitalAscetic\TagsBundle\Model;
 class TagQueryResult
 {
     /** @var int */
-    private $objectId;
+    private $total;
 
-    /** @var string */
-    private $objectClass;
+    /** @var TaggableQueryResult[] */
+    private $results;
 
     /**
-     * @param int $objectId
-     * @param string $objectClass
+     * @param int $total
+     * @param array $results
      */
-    public function __construct(int $objectId, string $objectClass)
+    public function __construct(int $total, array $results = array())
     {
-        $this->objectId = $objectId;
-        $this->objectClass = $objectClass;
+        $this->total = $total;
+        $this->results = $results;
     }
 
     /**
      * @return int
      */
-    public function getObjectId(): int
+    public function getTotal(): int
     {
-        return $this->objectId;
+        return $this->total;
     }
 
     /**
-     * @return string
+     * @return TaggableQueryResult[]
      */
-    public function getObjectClass(): string
+    public function getResults(): array
     {
-        return $this->objectClass;
+        return $this->results;
+    }
+
+    public function addResult(TaggableQueryResult $taggableQueryResult)
+    {
+        $this->results[] = $taggableQueryResult;
     }
 }

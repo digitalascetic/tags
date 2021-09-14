@@ -3,7 +3,6 @@
 namespace DigitalAscetic\TagsBundle\Test\Functional\Tag;
 
 use DigitalAscetic\TagsBundle\Entity\TagsRelationship;
-use DigitalAscetic\TagsBundle\Model\TagQueryResult;
 use DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity;
 
 class TagRelationshipTest extends BaseTagTest
@@ -75,11 +74,11 @@ class TagRelationshipTest extends BaseTagTest
         $resultTag1 = $this->tagManager->findByTag($tag1);
 
         $this->assertNotEmpty($resultTag1);
-        $this->assertEquals(1, count($resultTag1));
+        $this->assertEquals(1, $resultTag1->getTotal());
 
         $resultTag2 = $this->tagManager->findByTag($tag2);
 
         $this->assertNotEmpty($resultTag2);
-        $this->assertEquals(2, count($resultTag2));
+        $this->assertEquals(2, $resultTag2->getTotal());
     }
 }
