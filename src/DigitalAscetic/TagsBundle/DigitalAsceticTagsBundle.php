@@ -1,6 +1,6 @@
 <?php
 
-namespace DigitalAscetic\BaseTagBundle;
+namespace DigitalAscetic\TagsBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

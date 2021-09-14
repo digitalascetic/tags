@@ -18,7 +18,7 @@
   "autoload-dev": {
     "psr-4": {
       "": "src/",
-      "DigitalAscetic\\BaseTagBundle\\Test\\": "tests/"
+      "DigitalAscetic\\TagsBundle\\Test\\": "tests/"
     },
     "files": [
       "tests/Functional/AppKernel.php"
@@ -26,6 +26,7 @@
   },
   "require": {
     "php": ">=7.2",
+    "ext-json": "*",
     "symfony/symfony": "^3.4",
     "doctrine/orm": "^2.5",
     "doctrine/doctrine-bundle": "^1.6",

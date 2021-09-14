@@ -1,44 +1,31 @@
 <?php
 
-namespace DigitalAscetic\BaseTagBundle\Test\Entity;
+namespace DigitalAscetic\TagsBundle\Entity;
 
-use DigitalAscetic\BaseTagBundle\Entity\ITag;
 use Doctrine\ORM\Mapping as ORM;
 
-class Tags implements ITag
+trait TagTrait
 {
     /**
      * @var string
      *
      * @ORM\Column(name="tag_name", type="string", nullable=false)
      */
-    private $tagName;
+    protected $tagName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="tag_hex_color", type="string", nullable=false)
      */
-    private $tagHexColor;
+    protected $tagHexColor;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="object_class", type="string", nullable=true)
+     * @ORM\Column(name="category", type="string", nullable=true)
      */
-    private $objectClass;
-
-    /**
-     * @param string $tagName
-     * @param string $tagHexColor
-     * @param string|null $objectClass
-     */
-    public function __construct(string $tagName, string $tagHexColor, ?string $objectClass)
-    {
-        $this->tagName = $tagName;
-        $this->tagHexColor = $tagHexColor;
-        $this->objectClass = $objectClass;
-    }
+    protected $category;
 
     /**
      * @return string
@@ -75,8 +62,16 @@ class Tags implements ITag
     /**
      * @return string|null
      */
-    public function getObjectClass(): ?string
+    public function getCategory(): ?string
     {
-        return $this->objectClass;
+        return $this->category;
+    }
+
+    /**
+     * @param string|null $category
+     */
+    public function setCategory(?string $category): void
+    {
+        $this->category = $category;
     }
 }
