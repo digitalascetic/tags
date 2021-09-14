@@ -27,10 +27,6 @@ trait TaggableTrait
     {
         $tags = $this->getTags();
 
-        if (empty($tags)) {
-            return false;
-        }
-
         return in_array($tag->getId(), $tags);
     }
 
