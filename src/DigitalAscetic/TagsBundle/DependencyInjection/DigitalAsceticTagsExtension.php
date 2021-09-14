@@ -19,16 +19,16 @@ class DigitalAsceticTagsExtension extends Extension implements PrependExtensionI
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         if ($config['enabled']) {
-            if ($config['tags_relations_indexed'] && $config['tags_relations_indexed']['enabled']) {
+            if ($config['tags_relations_indexation'] && $config['tags_relations_indexation']['enabled']) {
                 $tagRelationshipMapping = new Definition(TagsRelationshipMappingSubscriber::class);
-                $tagRelationshipMapping->addArgument($config['tags_relations_indexed']['tag']);
+                $tagRelationshipMapping->addArgument($config['tags_relations_indexation']['tag']);
                 $tagRelationshipMapping->addTag('doctrine.event_subscriber');
                 $container->setDefinition(TagsRelationshipMappingSubscriber::SERVICE_NAME, $tagRelationshipMapping);
             }
 
             $tagManager = new Definition(TagManager::class);
             $tagManager->addArgument(new Reference('doctrine.orm.entity_manager'));
-            $tagManager->addArgument($config['tags_relations_indexed']);
+            $tagManager->addArgument($config['tags_relations_indexation']);
             $container->setDefinition(TagManager::SERVICE_NAME, $tagManager);
             $container->setAlias(TagManager::class, TagManager::SERVICE_NAME);
             $container->setAlias(TagManagerInterface::class, TagManager::class);
@@ -42,7 +42,7 @@ class DigitalAsceticTagsExtension extends Extension implements PrependExtensionI
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         if ($config['enabled']) {
-            if ($config['tags_relations_indexed'] && $config['tags_relations_indexed']['enabled']) {
+            if ($config['tags_relations_indexation'] && $config['tags_relations_indexation']['enabled']) {
                 if (!isset($bundles['DoctrineBundle'])) {
                     throw new InvalidConfigurationException(
                         "You must register DoctrineBundle in AppKernel in order to work with DigitalAsceticTagsBundle"
@@ -56,7 +56,7 @@ class DigitalAsceticTagsExtension extends Extension implements PrependExtensionI
                                 'type' => 'annotation',
                                 'is_bundle' => false,
                                 'prefix' => 'DigitalAscetic\TagsBundle',
-                                'dir' => $config['tags_relations_indexed']['mapping_dir'],
+                                'dir' => $config['tags_relations_indexation']['mapping_dir'],
                                 'alias' => 'DigitalAsceticTags',
                             ),
                         ),
