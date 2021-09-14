@@ -15,7 +15,5 @@ interface ITag
 
     public function getTagName(): string;
 
-    public function getTagHexColor(): string;
-
     public function getCategory(): ?string;
 }
