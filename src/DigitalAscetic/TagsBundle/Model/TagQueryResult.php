@@ -5,27 +5,27 @@ namespace DigitalAscetic\TagsBundle\Model;
 class TagQueryResult
 {
     /** @var int */
-    private $id;
+    private $objectId;
 
     /** @var string */
     private $objectClass;
 
     /**
-     * @param int $id
+     * @param int $objectId
      * @param string $objectClass
      */
-    public function __construct(int $id, string $objectClass)
+    public function __construct(int $objectId, string $objectClass)
     {
-        $this->id = $id;
+        $this->objectId = $objectId;
         $this->objectClass = $objectClass;
     }
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getObjectId(): int
     {
-        return $this->id;
+        return $this->objectId;
     }
 
     /**
