@@ -25,9 +25,10 @@ class TagTest extends BaseTagTest
         $this->assertEquals(1, $tag->getId());
 
         $taggable = new TaggableEntity();
-        $this->tagManager->packTags($taggable, [$tag]);
         $this->em->persist($taggable);
         $this->em->flush();
+
+        $this->tagManager->packTags($taggable, [$tag]);
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
@@ -41,6 +42,9 @@ class TagTest extends BaseTagTest
         $this->em->flush();
 
         $taggable = new TaggableEntity();
+        $this->em->persist($taggable);
+        $this->em->flush();
+
         $this->tagManager->packTags($taggable, [$tag]);
 
         $this->assertNotNull($taggable->getTags());

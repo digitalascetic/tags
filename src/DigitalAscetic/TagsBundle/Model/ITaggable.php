@@ -11,6 +11,8 @@ namespace DigitalAscetic\TagsBundle\Model;
 
 interface ITaggable
 {
+    public function getId(): int;
+
     public function hasTag(Itag $tag): bool;
 
     public function getTags(): ?array;
