@@ -4,7 +4,7 @@ Digital Ascetic Tags Bundle
 ## Installation
 
 ```
-composer install digitalascetic/tags
+composer require digitalascetic/tags
 ```
 
 Add this bundle to your AppKernel:
