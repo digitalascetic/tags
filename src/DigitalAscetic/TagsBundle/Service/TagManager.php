@@ -46,7 +46,7 @@ class TagManager implements TagManagerInterface
         $this->em->flush();
     }
 
-    public function findByTag(ITag $tag, string $category = null): TagQueryResult
+    public function findByTag(ITag $tag, string $relationship): TagQueryResult
     {
         $options = ['tag' => $tag];
 
@@ -54,11 +54,11 @@ class TagManager implements TagManagerInterface
             $options['objectClass'] = $category;
         }
 
-        $metadata = $this->em->getMetadataFactory()->getMetadataFor(ITagRelationship::class);
-        $classMappings = $metadata->getAssociationMappings();
-        var_dump($classMappings);
+        $results = $this->em->getRepository($relationship)->findBy(['tag' => $tag]);
 
-        return null;
+        $result = new TagQueryResult(count($results));
+
+        return $result;
     }
 
     private function addTagRelationship(ITaggable $taggable, ITag $tag)

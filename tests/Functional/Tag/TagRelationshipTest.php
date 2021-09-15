@@ -4,6 +4,7 @@ namespace DigitalAscetic\TagsBundle\Test\Functional\Tag;
 
 use DigitalAscetic\TagsBundle\Model\ITagRelationship;
 use DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity;
+use DigitalAscetic\TagsBundle\Test\Entity\TaggableRelationship;
 
 class TagRelationshipTest extends BaseTagTest
 {
@@ -72,12 +73,12 @@ class TagRelationshipTest extends BaseTagTest
         $this->tagManager->packTags($taggable1, [$tag1, $tag2]);
         $this->tagManager->packTags($taggable2, [$tag2]);
 
-        $resultTag1 = $this->tagManager->findByTag($tag1);
+        $resultTag1 = $this->tagManager->findByTag($tag1, TaggableRelationship::class);
 
         $this->assertNotEmpty($resultTag1);
         $this->assertEquals(1, $resultTag1->getTotal());
 
-        $resultTag2 = $this->tagManager->findByTag($tag2);
+        $resultTag2 = $this->tagManager->findByTag($tag2, TaggableRelationship::class);
 
         $this->assertNotEmpty($resultTag2);
         $this->assertEquals(2, $resultTag2->getTotal());

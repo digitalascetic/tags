@@ -4,6 +4,7 @@ namespace DigitalAscetic\TagsBundle\Service;
 
 use DigitalAscetic\TagsBundle\Model\ITag;
 use DigitalAscetic\TagsBundle\Model\ITaggable;
+use DigitalAscetic\TagsBundle\Model\ITagRelationship;
 use DigitalAscetic\TagsBundle\Model\TagQueryResult;
 
 interface TagManagerInterface
@@ -27,11 +28,11 @@ interface TagManagerInterface
     public function unPackTags(ITaggable $taggable, array $tags, bool $indexed = true): void;
 
     /**
-     * Find ITaggable entities that have a ITag related.
+     * Find ITaggable entities that have a ITag related from an ITagRelationship
      *
      * @param ITag $tag
-     * @param string|null $category
+     * @param string $relationship
      * @return TagQueryResult
      */
-    public function findByTag(ITag $tag, string $category = null): TagQueryResult;
+    public function findByTag(ITag $tag, string $relationship): TagQueryResult;
 }
