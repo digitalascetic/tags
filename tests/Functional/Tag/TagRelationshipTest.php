@@ -2,7 +2,7 @@
 
 namespace DigitalAscetic\TagsBundle\Test\Functional\Tag;
 
-use DigitalAscetic\TagsBundle\Entity\TagsRelationship;
+use DigitalAscetic\TagsBundle\Model\ITagRelationship;
 use DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity;
 
 class TagRelationshipTest extends BaseTagTest
@@ -18,14 +18,15 @@ class TagRelationshipTest extends BaseTagTest
         $taggable = new TaggableEntity();
         $this->em->persist($taggable);
         $this->em->flush();
+        $taggable->addTag($tag);
 
         $this->tagManager->packTags($taggable, [$tag]);
 
-        /** @var TagsRelationship $tagRelation */
-        $tagRelation = $this->em->getRepository(TagsRelationship::class)->findOneBy(['tag' => $tag]);
+        /** @var ITagRelationship $tagRelation */
+        $tagRelation = $this->em->getRepository($taggable->getEntityRelationship())->findOneBy(['tag' => $tag]);
 
         $this->assertNotNull($tagRelation);
-        $this->assertEquals($tagRelation->getObjectClass(), get_class($taggable));
+        $this->assertEquals($tagRelation->getObjectRelated(), $taggable);
         $this->assertEquals(1, $taggable->getId());
     }
 
@@ -45,8 +46,8 @@ class TagRelationshipTest extends BaseTagTest
 
         $this->tagManager->unPackTags($taggable, [$tag]);
 
-        /** @var TagsRelationship $tagRelation */
-        $tagRelation = $this->em->getRepository(TagsRelationship::class)->findOneBy(['tag' => $tag]);
+        /** @var ITagRelationship $tagRelation */
+        $tagRelation = $this->em->getRepository($taggable->getEntityRelationship())->findOneBy(['tag' => $tag]);
 
         $this->assertNull($tagRelation);
     }

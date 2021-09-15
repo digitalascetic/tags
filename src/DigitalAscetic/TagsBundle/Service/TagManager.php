@@ -2,9 +2,9 @@
 
 namespace DigitalAscetic\TagsBundle\Service;
 
-use DigitalAscetic\TagsBundle\Entity\TagsRelationship;
 use DigitalAscetic\TagsBundle\Model\ITag;
 use DigitalAscetic\TagsBundle\Model\ITaggable;
+use DigitalAscetic\TagsBundle\Model\ITagRelationship;
 use DigitalAscetic\TagsBundle\Model\TaggableQueryResult;
 use DigitalAscetic\TagsBundle\Model\TagQueryResult;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,27 +16,19 @@ class TagManager implements TagManagerInterface
     /** @var EntityManagerInterface */
     private $em;
 
-    /** @var array */
-    private $config;
-
     /**
      * @param EntityManagerInterface $em
-     * @param array $config
      */
-    public function __construct(EntityManagerInterface $em, array $config)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->config = $config;
     }
 
     public function packTags(ITaggable $taggable, array $tags, bool $indexed = true): void
     {
         foreach ($tags as $tag) {
             $taggable->addTag($tag);
-
-            if ($this->isTagRelationshipEnabled() && $indexed) {
-                $this->addTagRelationship($taggable, $tag);
-            }
+            $this->addTagRelationship($taggable, $tag);
         }
 
         $this->em->persist($taggable);
@@ -47,10 +39,7 @@ class TagManager implements TagManagerInterface
     {
         foreach ($tags as $tag) {
             $taggable->removeTag($tag);
-
-            if ($this->isTagRelationshipEnabled() && $indexed) {
-                $this->removeTagRelationship($taggable, $tag);
-            }
+            $this->removeTagRelationship($taggable, $tag);
         }
 
         $this->em->persist($taggable);
@@ -59,33 +48,29 @@ class TagManager implements TagManagerInterface
 
     public function findByTag(ITag $tag, string $category = null): TagQueryResult
     {
-        if (!$this->isTagRelationshipEnabled()) {
-            throw new \Exception('Option tags_relations_indexation must be enabled to allow findByTag method.');
-        }
-
         $options = ['tag' => $tag];
 
         if (isset($category)) {
             $options['objectClass'] = $category;
         }
 
-        /** @var TagsRelationship[] $tagsRelationship */
-        $tagsRelationship = $this->em->getRepository(TagsRelationship::class)->findBy($options);
+        $metadata = $this->em->getMetadataFactory()->getMetadataFor(ITagRelationship::class);
+        $classMappings = $metadata->getAssociationMappings();
+        var_dump($classMappings);
 
-        /** @var TagQueryResult[] $taggableEntities */
-        $tagQueryResult = new TagQueryResult(count($tagsRelationship));
-
-        foreach ($tagsRelationship as $tagRel) {
-            $tagQueryResult->addResult(new TaggableQueryResult($tagRel->getObjectId(), $tagRel->getObjectClass()));
-        }
-
-        return $tagQueryResult;
+        return null;
     }
 
     private function addTagRelationship(ITaggable $taggable, ITag $tag)
     {
         if (!$this->hasTagRelationship($taggable, $tag)) {
-            $tagRelationship = new TagsRelationship($tag, $taggable->getId(), $this->getClassName($taggable));
+            $refClass = new \ReflectionClass($taggable->getEntityRelationship());
+
+            /** @var ITagRelationship $tagRelationship */
+            $tagRelationship = $refClass->newInstanceWithoutConstructor();
+            $tagRelationship->setTag($tag);
+            $tagRelationship->setObjectRelated($taggable);
+
             $this->em->persist($tagRelationship);
             $this->em->flush();
         }
@@ -94,10 +79,8 @@ class TagManager implements TagManagerInterface
     private function removeTagRelationship(ITaggable $taggable, ITag $tag)
     {
         if ($this->hasTagRelationship($taggable, $tag)) {
-            $className = $this->getClassName($taggable);
-
-            $tagRelationship = $this->em->getRepository(TagsRelationship::class)->findOneBy(
-                ['tag' => $tag, 'objectClass' => $className, 'objectId' => $taggable->getId()]
+            $tagRelationship = $this->em->getRepository($taggable->getEntityRelationship())->findOneBy(
+                ['tag' => $tag, 'objectRelated' => $taggable]
             );
 
             $this->em->remove($tagRelationship);
@@ -107,22 +90,10 @@ class TagManager implements TagManagerInterface
 
     private function hasTagRelationship(ITaggable $taggable, ITag $tag): bool
     {
-        $className = $this->getClassName($taggable);
-
-        $tagRelationship = $this->em->getRepository(TagsRelationship::class)->findOneBy(
-            ['tag' => $tag, 'objectClass' => $className, 'objectId' => $taggable->getId()]
+        $tagRelationship = $this->em->getRepository($taggable->getEntityRelationship())->findOneBy(
+            ['tag' => $tag, 'objectRelated' => $taggable]
         );
 
         return !is_null($tagRelationship);
-    }
-
-    private function getClassName($entity)
-    {
-        return $this->em->getMetadataFactory()->getMetadataFor(get_class($entity))->getName();
-    }
-
-    private function isTagRelationshipEnabled(): bool
-    {
-        return $this->config['enabled'];
     }
 }
