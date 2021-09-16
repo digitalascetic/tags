@@ -24,11 +24,6 @@ class DigitalAsceticTagsExtension extends Extension implements PrependExtensionI
 
     public function prepend(ContainerBuilder $container)
     {
-        $bundles = $container->getParameter('kernel.bundles');
-        $configs = $container->getExtensionConfig($this->getAlias());
-        $config = $this->processConfiguration(new Configuration(), $configs);
 
-        if ($config['enabled']) {
-        }
     }
 }
