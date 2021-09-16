@@ -44,13 +44,13 @@ class TaggableSubsciber implements EventSubscriber
 
             /** @var ITaggable $taggable */
             $taggable = $args->getEntity();
-            $tags = $taggable->getTags();
+            $idTags = $taggable->getIdTags();
 
-            foreach ($tags as $tag) {
+            foreach ($idTags as $idTag) {
                 $tagClassName = $this->getTag($taggable);
 
                 /** @var ITag $tagEntity */
-                $tagEntity = $uow->createEntity($tagClassName, ['id' => $tag]);
+                $tagEntity = $uow->createEntity($tagClassName, ['id' => $idTag]);
                 $tagRelationship = $this->createTagRelationship($tagEntity, $taggable);
                 $em->persist($tagRelationship);
                 $em->flush();
@@ -95,14 +95,14 @@ class TaggableSubsciber implements EventSubscriber
             if ($oldTagsValue != $newTagsValue) {
                 $this->removeTagRelationship($taggable, $em);
 
-                $newTags = json_decode($newTagsValue, true);
+                $newIdTags = $taggable->getIdTags();
 
-                if ($newTags) {
-                    foreach ($newTags as $tag) {
+                if ($newIdTags) {
+                    foreach ($newIdTags as $idTag) {
                         $tagClassName = $this->getTag($taggable);
 
                         /** @var ITag $tagEntity */
-                        $tagEntity = $uow->createEntity($tagClassName, ['id' => $tag]);
+                        $tagEntity = $uow->createEntity($tagClassName, ['id' => $idTag]);
                         $tagRelationship = $this->createTagRelationship($tagEntity, $taggable);
 
                         $em->persist($tagRelationship);

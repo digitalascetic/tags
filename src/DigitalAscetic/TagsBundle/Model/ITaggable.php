@@ -13,7 +13,7 @@ interface ITaggable
 {
     public function getId();
 
-    public function getTags(): ?array;
+    public function getIdTags(): ?array;
 
     public function addTag(ITag $tag): void;
 

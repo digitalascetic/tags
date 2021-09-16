@@ -13,20 +13,20 @@ trait TaggableTrait
      */
     private $tags;
 
-    public function getTags(): array
+    public function getIdTags(): array
     {
         if (is_null($this->tags)) {
             return [];
         }
 
-        return json_decode($this->tags, true);
+        return array_values(json_decode($this->tags, true));
     }
 
     public function addTag(ITag $tag): void
     {
-        $tags = $this->getTags();
+        $tags = $this->getIdTags();
 
-        if (!in_array($tag->getId(), $this->getTags())) {
+        if (!in_array($tag->getId(), $this->getIdTags())) {
             array_push($tags, $tag->getId());
         }
 
@@ -35,9 +35,9 @@ trait TaggableTrait
 
     public function removeTag(ITag $tag): void
     {
-        $tags = $this->getTags();
+        $tags = $this->getIdTags();
 
-        if (in_array($tag->getId(), $this->getTags())) {
+        if (in_array($tag->getId(), $this->getIdTags())) {
             $tagIndex = array_search($tag->getId(), $tags);
             unset($tags[$tagIndex]);
         }

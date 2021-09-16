@@ -9,7 +9,8 @@
 namespace DigitalAscetic\TagsBundle\Test\Entity;
 
 
-use DigitalAscetic\TagsBundle\Entity\AbstractTaggable;
+use DigitalAscetic\TagsBundle\Entity\TaggableTrait;
+use DigitalAscetic\TagsBundle\Model\ITaggable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,8 +20,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="taggable")
  * @ORM\Entity()
  */
-class TaggableEntity extends AbstractTaggable
+class TaggableEntity implements ITaggable
 {
+    use TaggableTrait;
+
     /**
      * @var int
      *

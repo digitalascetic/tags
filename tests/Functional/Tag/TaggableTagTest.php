@@ -25,7 +25,7 @@ class TaggableTagTest extends BaseTagTest
         $this->em->flush();
 
         /** @var ITagRelationship $tagRelation */
-        $tagRelation = $this->em->getRepository(TaggableTagRelationship::class)->findOneBy(['tag' => $tagCustom]);
+        $tagRelation = $this->em->getRepository($taggable->getEntityRelationshipClass())->findOneBy(['tag' => $tagCustom]);
 
         $this->assertNotNull($tagRelation);
         $this->assertEquals($tagRelation->getRelatedObject(), $taggable);

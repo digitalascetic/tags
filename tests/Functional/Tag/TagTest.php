@@ -29,9 +29,9 @@ class TagTest extends BaseTagTest
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->assertNotNull($taggable->getTags());
-        $this->assertEquals(1, count($taggable->getTags()));
-        $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
+        $this->assertNotNull($taggable->getIdTags());
+        $this->assertEquals(1, count($taggable->getIdTags()));
+        $this->assertEquals($tag->getId(), $taggable->getIdTags()[0]);
     }
 
     public function testClearTags()
@@ -45,13 +45,13 @@ class TagTest extends BaseTagTest
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->assertNotNull($taggable->getTags());
-        $this->assertEquals(1, count($taggable->getTags()));
-        $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
+        $this->assertNotNull($taggable->getIdTags());
+        $this->assertEquals(1, count($taggable->getIdTags()));
+        $this->assertEquals($tag->getId(), $taggable->getIdTags()[0]);
 
         $taggable->removeTag($tag);
 
-        $this->assertEmpty($taggable->getTags());
+        $this->assertEmpty($taggable->getIdTags());
     }
 
     public function testRemoveTag()
@@ -68,16 +68,16 @@ class TagTest extends BaseTagTest
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->assertNotNull($taggable->getTags());
-        $this->assertEquals(2, count($taggable->getTags()));
-        $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
+        $this->assertNotNull($taggable->getIdTags());
+        $this->assertEquals(2, count($taggable->getIdTags()));
+        $this->assertEquals($tag->getId(), $taggable->getIdTags()[0]);
 
         $taggable->removeTag($tag);
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->assertEquals(1, count($taggable->getTags()));
-        $this->assertEquals($tag2->getId(), array_values($taggable->getTags())[0]);
+        $this->assertEquals(1, count($taggable->getIdTags()));
+        $this->assertEquals($tag2->getId(), $taggable->getIdTags()[0]);
     }
 
     public function createTagWithCategory()
