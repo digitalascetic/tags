@@ -18,17 +18,15 @@ class TagRelationshipTest extends BaseTagTest
         $this->assertEquals(1, $tag->getId());
 
         $taggable = new TaggableEntity();
+        $taggable->addTag($tag);
         $this->em->persist($taggable);
         $this->em->flush();
-        $taggable->addTag($tag);
-
-        $this->tagManager->packTags($taggable, [$tag]);
 
         /** @var ITagRelationship $tagRelation */
         $tagRelation = $this->em->getRepository($taggable->getEntityRelationship())->findOneBy(['tag' => $tag]);
 
         $this->assertNotNull($tagRelation);
-        $this->assertEquals($tagRelation->getObjectRelated(), $taggable);
+        $this->assertEquals($tagRelation->getRelatedObject(), $taggable);
         $this->assertEquals(1, $taggable->getId());
     }
 
@@ -41,12 +39,13 @@ class TagRelationshipTest extends BaseTagTest
         $this->assertEquals(1, $tag->getId());
 
         $taggable = new TaggableEntity();
+        $taggable->addTag($tag);
         $this->em->persist($taggable);
         $this->em->flush();
 
-        $this->tagManager->packTags($taggable, [$tag]);
-
-        $this->tagManager->unPackTags($taggable, [$tag]);
+        $taggable->removeTag($tag);
+        $this->em->persist($taggable);
+        $this->em->flush();
 
         /** @var ITagRelationship $tagRelation */
         $tagRelation = $this->em->getRepository($taggable->getEntityRelationship())->findOneBy(['tag' => $tag]);
@@ -62,21 +61,22 @@ class TagRelationshipTest extends BaseTagTest
 
         $this->em->persist($tag1);
         $this->em->persist($tag2);
+        $this->em->flush();
 
         $taggable1 = new TaggableEntity();
+        $taggable1->addTag($tag1);
+        $taggable1->addTag($tag2);
         $taggable2 = new TaggableEntity();
+        $taggable2->addTag($tag2);
 
         $this->em->persist($taggable1);
         $this->em->persist($taggable2);
 
         $this->em->flush();
 
-        $this->tagManager->packTags($taggable1, [$tag1, $tag2]);
-        $this->tagManager->packTags($taggable2, [$tag2]);
-
         /** @var QueryBuilder $qb */
         $qb = $this->em->getRepository(TaggableEntity::class)->createQueryBuilder('t');
-        $qb->leftJoin(TaggableRelationship::class, 'tr', 'WITH', 't.id = tr.objectRelated')
+        $qb->leftJoin(TaggableRelationship::class, 'tr', 'WITH', 't.id = tr.relatedObject')
             ->where('tr.tag = :tag')
             ->setParameter('tag', $tag1)
             ->addGroupBy('t.id');

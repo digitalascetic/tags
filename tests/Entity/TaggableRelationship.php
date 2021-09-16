@@ -45,7 +45,7 @@ class TaggableRelationship implements ITagRelationship
      * @ORM\ManyToOne (targetEntity="DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity")
      * @ORM\JoinColumn(name="taggable_id", referencedColumnName="id", nullable=false)
      */
-    private $objectRelated;
+    private $relatedObject;
 
     /**
      * @param Tag $tag
@@ -54,7 +54,7 @@ class TaggableRelationship implements ITagRelationship
     public function __construct(Tag $tag, TaggableEntity $objectRelated)
     {
         $this->tag = $tag;
-        $this->objectRelated = $objectRelated;
+        $this->relatedObject = $objectRelated;
     }
 
     /**
@@ -70,25 +70,25 @@ class TaggableRelationship implements ITagRelationship
         return $this->tag;
     }
 
-    public function getObjectRelated(): ITaggable
+    public function getRelatedObject(): ITaggable
     {
-        return $this->objectRelated;
+        return $this->relatedObject;
     }
 
     /**
      * @param Tag $tag
      */
-    public function setTag(ITag $tag): void
+    public function setTag($tag): void
     {
         $this->tag = $tag;
     }
 
     /**
-     * @param TaggableEntity $objectRelated
+     * @param TaggableEntity $taggable
      */
-    public function setObjectRelated(ITaggable $objectRelated): void
+    public function setRelatedObject(ITaggable $taggable): void
     {
-        $this->objectRelated = $objectRelated;
+        $this->relatedObject = $taggable;
     }
 
 }

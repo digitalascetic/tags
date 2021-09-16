@@ -8,11 +8,11 @@ interface ITagRelationship
     public function getTag(): ITag;
 
     /** @var ITaggable */
-    public function getObjectRelated(): ITaggable;
+    public function getRelatedObject(): ITaggable;
 
     /** @param ITag */
-    public function setTag(ITag $tag): void;
+    public function setTag($tag): void;
 
     /** @param ITaggable */
-    public function setObjectRelated(ITaggable $taggable): void;
+    public function setRelatedObject(ITaggable $taggable): void;
 }

@@ -25,10 +25,9 @@ class TagTest extends BaseTagTest
         $this->assertEquals(1, $tag->getId());
 
         $taggable = new TaggableEntity();
+        $taggable->addTag($tag);
         $this->em->persist($taggable);
         $this->em->flush();
-
-        $this->tagManager->packTags($taggable, [$tag], false);
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
@@ -42,16 +41,15 @@ class TagTest extends BaseTagTest
         $this->em->flush();
 
         $taggable = new TaggableEntity();
+        $taggable->addTag($tag);
         $this->em->persist($taggable);
         $this->em->flush();
-
-        $this->tagManager->packTags($taggable, [$tag], false);
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(1, count($taggable->getTags()));
         $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
 
-        $this->tagManager->unPackTags($taggable, [$tag], false);
+        $taggable->removeTag($tag);
 
         $this->assertEmpty($taggable->getTags());
     }
@@ -65,19 +63,21 @@ class TagTest extends BaseTagTest
         $this->em->flush();
 
         $taggable = new TaggableEntity();
+        $taggable->addTag($tag);
+        $taggable->addTag($tag2);
         $this->em->persist($taggable);
         $this->em->flush();
-
-        $this->tagManager->packTags($taggable, [$tag, $tag2], false);
 
         $this->assertNotNull($taggable->getTags());
         $this->assertEquals(2, count($taggable->getTags()));
         $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
 
-        $this->tagManager->unPackTags($taggable, [$tag2], false);
+        $taggable->removeTag($tag);
+        $this->em->persist($taggable);
+        $this->em->flush();
 
         $this->assertEquals(1, count($taggable->getTags()));
-        $this->assertEquals($tag->getId(), array_values($taggable->getTags())[0]);
+        $this->assertEquals($tag2->getId(), array_values($taggable->getTags())[0]);
     }
 
     public function createTagWithCategory()
