@@ -53,5 +53,7 @@ doctrine:
 
 digital_ascetic_tags:
   enabled: true
-  tag:
-    class_name: DigitalAscetic\TagsBundle\Test\Entity\Tag
+  default_tag: DigitalAscetic\TagsBundle\Test\Entity\Tag
+  taggables:
+    DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity:
+      relationship: DigitalAscetic\TagsBundle\Test\Entity\TaggableRelationship

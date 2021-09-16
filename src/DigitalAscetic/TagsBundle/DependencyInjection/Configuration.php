@@ -15,11 +15,13 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->canBeEnabled()
             ->children()
-                ->arrayNode('tag')->isRequired()
-                    ->children()
-                        ->scalarNode('class_name')->cannotBeEmpty()->end()
-                        ->scalarNode('property_id')->defaultValue('id')->end()
-                    ->end()
+                ->scalarNode('default_tag')->isRequired()->end()
+                ->arrayNode('taggables')->isRequired()
+                ->useAttributeAsKey('name')
+                ->arrayPrototype()
+                ->children()
+                    ->scalarNode('relationship')->isRequired()->end()
+                    ->scalarNode('tag')->end()
                 ->end()
             ->end()
         ->end();

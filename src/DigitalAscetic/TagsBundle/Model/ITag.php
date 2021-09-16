@@ -11,7 +11,7 @@ namespace DigitalAscetic\TagsBundle\Model;
 
 interface ITag
 {
-    public function getId(): int;
+    public function getId();
 
     public function getTagName(): string;
 

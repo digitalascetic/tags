@@ -46,7 +46,7 @@ class TaggableSubsciber implements EventSubscriber
             $tags = $taggable->getTags();
 
             foreach ($tags as $tag) {
-                $tagClassName = $this->config['tag']['class_name'];
+                $tagClassName = $this->getTag($taggable);
 
                 /** @var ITag $tagEntity */
                 $tagEntity = $uow->createEntity($tagClassName, ['id' => $tag]);
@@ -98,7 +98,7 @@ class TaggableSubsciber implements EventSubscriber
 
                 if ($newTags) {
                     foreach ($newTags as $tag) {
-                        $tagClassName = $this->config['tag']['class_name'];
+                        $tagClassName = $this->getTag($taggable);
 
                         /** @var ITag $tagEntity */
                         $tagEntity = $uow->createEntity($tagClassName, ['id' => $tag]);
@@ -140,6 +140,15 @@ class TaggableSubsciber implements EventSubscriber
         $tagRelationship->setRelatedObject($taggable);
 
         return $tagRelationship;
+    }
+
+    private function getTag(ITaggable $taggable): string
+    {
+        if (array_key_exists('tag', $this->config['taggables'][get_class($taggable)])) {
+            return $this->config['taggables'][get_class($taggable)]['tag'];
+        }
+
+        return $this->config['default_tag'];
     }
 
     private function isTaggable($entity)
