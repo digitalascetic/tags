@@ -20,6 +20,7 @@ class TaggableSubsciber implements EventSubscriber
     {
         return array(
             Events::postPersist,
+            Events::preRemove,
             Events::onFlush,
         );
     }
@@ -41,6 +42,16 @@ class TaggableSubsciber implements EventSubscriber
                 $em->persist($tagRelationship);
                 $em->flush();
             }
+        }
+    }
+
+    public function preRemove(LifecycleEventArgs $args)
+    {
+        if ($this->isTaggable($args->getEntity())) {
+            $em = $args->getEntityManager();
+            /** @var ITaggable $taggable */
+            $taggable = $args->getEntity();
+            $this->removeTagRelationship($taggable, $em);
         }
     }
 
@@ -76,13 +87,7 @@ class TaggableSubsciber implements EventSubscriber
             $newTagsValue = array_key_exists(1, $changes) ? $changes[1] : null;
 
             if ($oldTagsValue != $newTagsValue) {
-                $relatedObjectProperty = call_user_func(
-                    $taggable->getEntityRelationshipClass().'::getRelatedObjectPropertyName'
-                );
-                $dqlDelete = "DELETE FROM ".$taggable->getEntityRelationshipClass(
-                    )." tr WHERE tr.".$relatedObjectProperty." = ".$taggable->getId();
-
-                $em->createQuery($dqlDelete)->execute();
+                $this->removeTagRelationship($taggable, $em);
 
                 $newTags = json_decode($newTagsValue, true);
 
@@ -105,6 +110,17 @@ class TaggableSubsciber implements EventSubscriber
                 }
             }
         }
+    }
+
+    private function removeTagRelationship(ITaggable $taggable, EntityManagerInterface $em)
+    {
+        $relatedObjectProperty = call_user_func(
+            $taggable->getEntityRelationshipClass().'::getRelatedObjectPropertyName'
+        );
+        $dqlDelete = "DELETE FROM ".$taggable->getEntityRelationshipClass(
+            )." tr WHERE tr.".$relatedObjectProperty." = ".$taggable->getId();
+
+        $em->createQuery($dqlDelete)->execute();
     }
 
     private function createTagRelationship(ITag $tag, ITaggable $taggable): ITagRelationship

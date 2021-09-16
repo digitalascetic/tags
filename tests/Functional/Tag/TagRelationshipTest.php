@@ -87,4 +87,39 @@ class TagRelationshipTest extends BaseTagTest
         $this->assertEquals(1, count($results));
         $this->assertEquals($taggable1->getId(), $results[0]->getId());
     }
+
+    public function testRemoveTaggableWithTags()
+    {
+        $tag1 = $this->createTag('Tag1');
+        $tag2 = $this->createTag('Tag2');
+
+        $this->em->persist($tag1);
+        $this->em->persist($tag2);
+        $this->em->flush();
+
+        $taggable = new TaggableEntity();
+        $taggable->addTag($tag1);
+        $taggable->addTag($tag2);
+        $this->em->persist($taggable);
+        $this->em->flush();
+
+        $this->assertEquals(1, $taggable->getId());
+
+        $tagRelationBeforeRemove = $this->em->getRepository($taggable->getEntityRelationshipClass())->findBy(
+            [TaggableRelationship::getRelatedObjectPropertyName() => $taggable]
+        );
+
+        $this->assertNotEmpty($tagRelationBeforeRemove);
+        $this->assertEquals(2, count($tagRelationBeforeRemove));
+
+
+        $this->em->remove($taggable);
+        $this->em->flush();
+
+        $tagRelationAfterRemove = $this->em->getRepository($taggable->getEntityRelationshipClass())->findBy(
+            [TaggableRelationship::getRelatedObjectPropertyName() => $taggable]
+        );
+
+        $this->assertEmpty($tagRelationAfterRemove);
+    }
 }
