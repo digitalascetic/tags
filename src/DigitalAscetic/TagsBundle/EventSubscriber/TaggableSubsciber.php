@@ -66,13 +66,6 @@ class TaggableSubsciber implements EventSubscriber
                 $this->syncTags($entity, $em);
             }
         }
-
-        foreach ($uow->getScheduledEntityDeletions() as $entity) {
-            /** @var ITaggable $entity */
-            if ($this->isTaggable($entity)) {
-                $this->syncTags($entity, $em);
-            }
-        }
     }
 
     private function syncTags(ITaggable $taggable, EntityManagerInterface $em)
