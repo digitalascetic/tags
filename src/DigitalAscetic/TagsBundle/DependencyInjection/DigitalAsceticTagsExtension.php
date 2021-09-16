@@ -16,6 +16,7 @@ class DigitalAsceticTagsExtension extends Extension implements PrependExtensionI
 
         if ($config['enabled']) {
             $taggableSubscriber = new Definition(TaggableSubsciber::class);
+            $taggableSubscriber->addArgument($config);
             $taggableSubscriber->addTag('doctrine.event_subscriber');
             $container->setDefinition(TaggableSubsciber::SERVICE_NAME, $taggableSubscriber);
             $container->setAlias(TaggableSubsciber::class, TaggableSubsciber::SERVICE_NAME);

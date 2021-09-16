@@ -5,7 +5,6 @@ namespace DigitalAscetic\TagsBundle\EventSubscriber;
 use DigitalAscetic\TagsBundle\Model\ITag;
 use DigitalAscetic\TagsBundle\Model\ITaggable;
 use DigitalAscetic\TagsBundle\Model\ITagRelationship;
-use DigitalAscetic\TagsBundle\Test\Entity\Tag;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -15,6 +14,17 @@ use Doctrine\ORM\Events;
 class TaggableSubsciber implements EventSubscriber
 {
     const SERVICE_NAME = 'ascetic.tags.taggable.subscriber';
+
+    /** @var array */
+    private $config;
+
+    /**
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
 
     public function getSubscribedEvents()
     {
@@ -36,8 +46,10 @@ class TaggableSubsciber implements EventSubscriber
             $tags = $taggable->getTags();
 
             foreach ($tags as $tag) {
+                $tagClassName = $this->config['tag']['class_name'];
+
                 /** @var ITag $tagEntity */
-                $tagEntity = $uow->createEntity(Tag::class, ['id' => $tag]);
+                $tagEntity = $uow->createEntity($tagClassName, ['id' => $tag]);
                 $tagRelationship = $this->createTagRelationship($tagEntity, $taggable);
                 $em->persist($tagRelationship);
                 $em->flush();
@@ -86,8 +98,10 @@ class TaggableSubsciber implements EventSubscriber
 
                 if ($newTags) {
                     foreach ($newTags as $tag) {
+                        $tagClassName = $this->config['tag']['class_name'];
+
                         /** @var ITag $tagEntity */
-                        $tagEntity = $uow->createEntity(Tag::class, ['id' => $tag]);
+                        $tagEntity = $uow->createEntity($tagClassName, ['id' => $tag]);
                         $tagRelationship = $this->createTagRelationship($tagEntity, $taggable);
 
                         $em->persist($tagRelationship);

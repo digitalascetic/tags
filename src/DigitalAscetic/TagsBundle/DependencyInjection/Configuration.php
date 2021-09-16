@@ -14,6 +14,14 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->canBeEnabled()
+            ->children()
+                ->arrayNode('tag')->isRequired()
+                    ->children()
+                        ->scalarNode('class_name')->cannotBeEmpty()->end()
+                        ->scalarNode('property_id')->defaultValue('id')->end()
+                    ->end()
+                ->end()
+            ->end()
         ->end();
 
         return $treeBuilder;

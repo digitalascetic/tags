@@ -22,19 +22,11 @@ trait TaggableTrait
         return json_decode($this->tags, true);
     }
 
-
-    public function hasTag(ITag $tag): bool
-    {
-        $tags = $this->getTags();
-
-        return in_array($tag->getId(), $tags);
-    }
-
     public function addTag(ITag $tag): void
     {
         $tags = $this->getTags();
 
-        if (!$this->hasTag($tag)) {
+        if (!in_array($tag->getId(), $this->getTags())) {
             array_push($tags, $tag->getId());
         }
 
@@ -45,7 +37,7 @@ trait TaggableTrait
     {
         $tags = $this->getTags();
 
-        if ($this->hasTag($tag)) {
+        if (in_array($tag->getId(), $this->getTags())) {
             $tagIndex = array_search($tag->getId(), $tags);
             unset($tags[$tagIndex]);
         }

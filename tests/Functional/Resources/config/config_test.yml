@@ -53,3 +53,5 @@ doctrine:
 
 digital_ascetic_tags:
   enabled: true
+  tag:
+    class_name: DigitalAscetic\TagsBundle\Test\Entity\Tag
