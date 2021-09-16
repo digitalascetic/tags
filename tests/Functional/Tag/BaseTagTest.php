@@ -3,6 +3,7 @@
 namespace DigitalAscetic\TagsBundle\Test\Functional\Tag;
 
 use DigitalAscetic\TagsBundle\Test\Entity\Tag;
+use DigitalAscetic\TagsBundle\Test\Entity\TagCustom;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -49,5 +50,10 @@ abstract class BaseTagTest extends KernelTestCase
     protected function createTag(string $tagName): Tag
     {
         return new Tag($tagName);
+    }
+
+    protected function createCustomTag(string $tagName): TagCustom
+    {
+        return new TagCustom($tagName);
     }
 }

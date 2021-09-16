@@ -4,6 +4,7 @@ namespace DigitalAscetic\TagsBundle\EventSubscriber;
 
 use DigitalAscetic\TagsBundle\Model\ITag;
 use DigitalAscetic\TagsBundle\Model\ITaggable;
+use DigitalAscetic\TagsBundle\Model\ITaggableTag;
 use DigitalAscetic\TagsBundle\Model\ITagRelationship;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
@@ -105,7 +106,7 @@ class TaggableSubsciber implements EventSubscriber
                         $tagRelationship = $this->createTagRelationship($tagEntity, $taggable);
 
                         $em->persist($tagRelationship);
-                        $meta = $em->getClassMetadata($this->getTagRelationship($taggable));
+                        $meta = $em->getClassMetadata($taggable->getEntityRelationshipClass());
 
                         if ($uow->isInIdentityMap($tagRelationship)) {
                             $uow->recomputeSingleEntityChangeSet($meta, $tagRelationship);
@@ -121,7 +122,7 @@ class TaggableSubsciber implements EventSubscriber
 
     private function removeTagRelationship(ITaggable $taggable, EntityManagerInterface $em)
     {
-        $tagRelationship = $this->getTagRelationship($taggable);
+        $tagRelationship = $taggable->getEntityRelationshipClass();
 
         $relatedObjectProperty = call_user_func($tagRelationship.'::getRelatedObjectPropertyName');
         $dqlDelete = "DELETE FROM ".$tagRelationship." tr WHERE tr.".$relatedObjectProperty." = ".$taggable->getId();
@@ -131,7 +132,7 @@ class TaggableSubsciber implements EventSubscriber
 
     private function createTagRelationship(ITag $tag, ITaggable $taggable): ITagRelationship
     {
-        $refClass = new \ReflectionClass($this->getTagRelationship($taggable));
+        $refClass = new \ReflectionClass($taggable->getEntityRelationshipClass());
 
         /** @var ITagRelationship $tagRelationship */
         $tagRelationship = $refClass->newInstanceWithoutConstructor();
@@ -143,16 +144,11 @@ class TaggableSubsciber implements EventSubscriber
 
     private function getTag(ITaggable $taggable): string
     {
-        if (array_key_exists('tag', $this->config['taggables'][get_class($taggable)])) {
-            return $this->config['taggables'][get_class($taggable)]['tag'];
+        if ($taggable instanceof ITaggableTag) {
+            return $taggable->getTagClass();
         }
 
         return $this->config['default_tag'];
-    }
-
-    private function getTagRelationship(ITaggable $taggable): string
-    {
-        return $this->config['taggables'][get_class($taggable)]['relationship'];
     }
 
     private function isTaggable($entity)

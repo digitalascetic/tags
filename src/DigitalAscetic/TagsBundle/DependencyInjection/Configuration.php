@@ -16,13 +16,6 @@ class Configuration implements ConfigurationInterface
             ->canBeEnabled()
             ->children()
                 ->scalarNode('default_tag')->isRequired()->end()
-                ->arrayNode('taggables')->isRequired()
-                ->useAttributeAsKey('name')
-                ->arrayPrototype()
-                ->children()
-                    ->scalarNode('relationship')->isRequired()->end()
-                    ->scalarNode('tag')->end()
-                ->end()
             ->end()
         ->end();
 

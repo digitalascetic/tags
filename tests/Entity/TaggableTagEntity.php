@@ -10,16 +10,17 @@ namespace DigitalAscetic\TagsBundle\Test\Entity;
 
 
 use DigitalAscetic\TagsBundle\Entity\AbstractTaggable;
+use DigitalAscetic\TagsBundle\Model\ITaggableTag;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class CountryTag
  * @package DigitalAscetic\BaseEntityBundle\Test\Entity
  *
- * @ORM\Table(name="taggable")
+ * @ORM\Table(name="taggable_tag")
  * @ORM\Entity()
  */
-class TaggableEntity extends AbstractTaggable
+class TaggableTagEntity extends AbstractTaggable implements ITaggableTag
 {
     /**
      * @var int
@@ -40,6 +41,11 @@ class TaggableEntity extends AbstractTaggable
 
     public function getEntityRelationshipClass(): string
     {
-        return TaggableRelationship::class;
+        return TaggableTagRelationship::class;
+    }
+
+    public function getTagClass(): string
+    {
+        return TagCustom::class;
     }
 }
