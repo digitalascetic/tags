@@ -14,20 +14,6 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->canBeEnabled()
-            ->children()
-                ->arrayNode('tags_relations_indexation')
-                    ->canBeDisabled()
-                    ->children()
-                        ->scalarNode('mapping_dir')->defaultValue('%kernel.root_dir%/../vendor/digitalascetic/tags/src/DigitalAscetic/TagsBundle/Entity')->end()
-                        ->arrayNode('tag')
-                            ->children()
-                                ->scalarNode('class_name')->isRequired()->end()
-                                ->scalarNode('property_id')->defaultValue('id')->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
         ->end();
 
         return $treeBuilder;

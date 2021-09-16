@@ -1,6 +1,6 @@
 {
   "name": "digitalascetic/tags",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "Proprietary",
   "type": "library",
   "description": "Digital Ascetic Tags Bundle",
@@ -29,11 +29,11 @@
     "ext-json": "*",
     "symfony/symfony": "^3.4",
     "doctrine/orm": "^2.5",
-    "doctrine/doctrine-bundle": "^1.6",
-    "symfony/monolog-bundle": "^3.0"
+    "doctrine/doctrine-bundle": "^1.6"
   },
   "require-dev": {
     "ext-sqlite3": "*",
-    "symfony/phpunit-bridge": "^5.3"
+    "symfony/phpunit-bridge": "^5.3",
+    "symfony/monolog-bundle": "^3.0"
   }
 }

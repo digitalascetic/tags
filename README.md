@@ -26,32 +26,34 @@ This bundle is disabled by default. You need to enable explicitly:
 ```
 digital_ascetic_tags:
   enabled: true
-  tags_relations_indexation:
-    tag:
-      class_name: 'DigitalAscetic\TagsBundle\Test\Entity\Tag'
 ```
 
 ## How it works
 
-First you need to create your Tag entity class that must implements _ITag_ interface.
+This bundle is based on 3 interfaces:
 
-Every entity you want to be "tagged", it must implement _ITaggable_ interface.
+* __ITag__ -> Tag entity
+* __ITaggable__ -> Entities with related tag(s).
+* __ITagRelationship__ -> Entity that store the relation between tag and taggable entities.
 
-> You can use TagTrait and TaggableTrait to simplify.
+Also we've implemented two Traits to simplify your code:
 
-You can inject our _TagManagerInterface_ service to add, remove or find tags:
+* TagTrait
+* TaggableTrait
+
+To avoid use ManyToMany relation between entities, ITaggable only store a json string with an array of Tag id's, and ITagRelationship stores the relation betweetn entities.
+
+Wit this logic, we improve the performance queries and reduce a lot of n+1 queries to database.
+
+So you can simply add/remove tags to an entity like this:
 
 ```
-/** Add tag(s) to entity taggable **/
-public function packTags(ITaggable $taggable, array $tags, bool $indexed = true): void;
-
-/** Remove tag(s) from entity taggable **/
-public function unPackTags(ITaggable $taggable, array $tags, bool $indexed = true): void;
-
-/** Find ITaggable entities that have a ITag related. **/
-public function findByTag(ITag $tag, string $category = null): TagQueryResult;
+        $taggable = new TaggableEntity();
+        $taggable->addTag($tag1);
+        $taggable->removeTag($tag2);
 ```
 
+To find which entities has one or more tags related, you only need to query to your ITagRelationship entity, or maybe do a join between your ITaggable and ITaggableRelationship entities.
 
 To get more information about it, you can see __Testing section__.
 

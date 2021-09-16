@@ -2,7 +2,6 @@
 
 namespace DigitalAscetic\TagsBundle\Test\Functional\Tag;
 
-use DigitalAscetic\TagsBundle\Service\TagManagerInterface;
 use DigitalAscetic\TagsBundle\Test\Entity\Tag;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -12,9 +11,6 @@ abstract class BaseTagTest extends KernelTestCase
 {
     /** @var EntityManagerInterface */
     protected $em;
-
-    /** @var TagManagerInterface */
-    protected $tagManager;
 
     protected function setUp(): void
     {
@@ -28,8 +24,6 @@ abstract class BaseTagTest extends KernelTestCase
         $this->em = static::$kernel->getContainer()
             ->get('doctrine')
             ->getManager();
-
-        $this->tagManager = static::$kernel->getContainer()->get(TagManagerInterface::class);
     }
 
     protected function tearDown(): void
