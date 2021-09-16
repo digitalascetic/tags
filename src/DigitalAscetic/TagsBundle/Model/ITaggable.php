@@ -18,6 +18,4 @@ interface ITaggable
     public function addTag(ITag $tag): void;
 
     public function removeTag(ITag $tag): void;
-
-    public function getEntityRelationshipClass(): string;
 }

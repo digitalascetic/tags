@@ -40,9 +40,4 @@ class TaggableEntity implements ITaggable
     {
         return $this->id;
     }
-
-    public function getEntityRelationshipClass(): string
-    {
-        return TaggableRelationship::class;
-    }
 }

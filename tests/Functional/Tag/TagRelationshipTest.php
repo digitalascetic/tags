@@ -23,7 +23,7 @@ class TagRelationshipTest extends BaseTagTest
         $this->em->flush();
 
         /** @var ITagRelationship $tagRelation */
-        $tagRelation = $this->em->getRepository($taggable->getEntityRelationshipClass())->findOneBy(['tag' => $tag]);
+        $tagRelation = $this->em->getRepository(TaggableRelationship::class)->findOneBy(['tag' => $tag]);
 
         $this->assertNotNull($tagRelation);
         $this->assertEquals($tagRelation->getRelatedObject(), $taggable);
@@ -48,7 +48,7 @@ class TagRelationshipTest extends BaseTagTest
         $this->em->flush();
 
         /** @var ITagRelationship $tagRelation */
-        $tagRelation = $this->em->getRepository($taggable->getEntityRelationshipClass())->findOneBy(['tag' => $tag]);
+        $tagRelation = $this->em->getRepository(TaggableRelationship::class)->findOneBy(['tag' => $tag]);
 
         $this->assertNull($tagRelation);
     }
@@ -105,7 +105,7 @@ class TagRelationshipTest extends BaseTagTest
 
         $this->assertEquals(1, $taggable->getId());
 
-        $tagRelationBeforeRemove = $this->em->getRepository($taggable->getEntityRelationshipClass())->findBy(
+        $tagRelationBeforeRemove = $this->em->getRepository(TaggableRelationship::class)->findBy(
             [TaggableRelationship::getRelatedObjectPropertyName() => $taggable]
         );
 
@@ -116,7 +116,7 @@ class TagRelationshipTest extends BaseTagTest
         $this->em->remove($taggable);
         $this->em->flush();
 
-        $tagRelationAfterRemove = $this->em->getRepository($taggable->getEntityRelationshipClass())->findBy(
+        $tagRelationAfterRemove = $this->em->getRepository(TaggableRelationship::class)->findBy(
             [TaggableRelationship::getRelatedObjectPropertyName() => $taggable]
         );
 

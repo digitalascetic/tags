@@ -105,7 +105,7 @@ class TaggableSubsciber implements EventSubscriber
                         $tagRelationship = $this->createTagRelationship($tagEntity, $taggable);
 
                         $em->persist($tagRelationship);
-                        $meta = $em->getClassMetadata($taggable->getEntityRelationshipClass());
+                        $meta = $em->getClassMetadata($this->getTagRelationship($taggable));
 
                         if ($uow->isInIdentityMap($tagRelationship)) {
                             $uow->recomputeSingleEntityChangeSet($meta, $tagRelationship);
@@ -121,18 +121,17 @@ class TaggableSubsciber implements EventSubscriber
 
     private function removeTagRelationship(ITaggable $taggable, EntityManagerInterface $em)
     {
-        $relatedObjectProperty = call_user_func(
-            $taggable->getEntityRelationshipClass().'::getRelatedObjectPropertyName'
-        );
-        $dqlDelete = "DELETE FROM ".$taggable->getEntityRelationshipClass(
-            )." tr WHERE tr.".$relatedObjectProperty." = ".$taggable->getId();
+        $tagRelationship = $this->getTagRelationship($taggable);
+
+        $relatedObjectProperty = call_user_func($tagRelationship.'::getRelatedObjectPropertyName');
+        $dqlDelete = "DELETE FROM ".$tagRelationship." tr WHERE tr.".$relatedObjectProperty." = ".$taggable->getId();
 
         $em->createQuery($dqlDelete)->execute();
     }
 
     private function createTagRelationship(ITag $tag, ITaggable $taggable): ITagRelationship
     {
-        $refClass = new \ReflectionClass($taggable->getEntityRelationshipClass());
+        $refClass = new \ReflectionClass($this->getTagRelationship($taggable));
 
         /** @var ITagRelationship $tagRelationship */
         $tagRelationship = $refClass->newInstanceWithoutConstructor();
@@ -149,6 +148,11 @@ class TaggableSubsciber implements EventSubscriber
         }
 
         return $this->config['default_tag'];
+    }
+
+    private function getTagRelationship(ITaggable $taggable): string
+    {
+        return $this->config['taggables'][get_class($taggable)]['relationship'];
     }
 
     private function isTaggable($entity)
