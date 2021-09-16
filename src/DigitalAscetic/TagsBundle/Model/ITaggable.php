@@ -21,5 +21,5 @@ interface ITaggable
 
     public function removeTag(ITag $tag): void;
 
-    public function getEntityRelationship(): string;
+    public function getEntityRelationshipClass(): string;
 }

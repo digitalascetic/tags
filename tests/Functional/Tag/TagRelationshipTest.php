@@ -23,7 +23,7 @@ class TagRelationshipTest extends BaseTagTest
         $this->em->flush();
 
         /** @var ITagRelationship $tagRelation */
-        $tagRelation = $this->em->getRepository($taggable->getEntityRelationship())->findOneBy(['tag' => $tag]);
+        $tagRelation = $this->em->getRepository($taggable->getEntityRelationshipClass())->findOneBy(['tag' => $tag]);
 
         $this->assertNotNull($tagRelation);
         $this->assertEquals($tagRelation->getRelatedObject(), $taggable);
@@ -48,7 +48,7 @@ class TagRelationshipTest extends BaseTagTest
         $this->em->flush();
 
         /** @var ITagRelationship $tagRelation */
-        $tagRelation = $this->em->getRepository($taggable->getEntityRelationship())->findOneBy(['tag' => $tag]);
+        $tagRelation = $this->em->getRepository($taggable->getEntityRelationshipClass())->findOneBy(['tag' => $tag]);
 
         $this->assertNull($tagRelation);
     }

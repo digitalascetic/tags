@@ -91,4 +91,10 @@ class TaggableRelationship implements ITagRelationship
         $this->relatedObject = $taggable;
     }
 
+    public static function getRelatedObjectPropertyName(): string
+    {
+        return 'relatedObject';
+    }
+
+
 }

@@ -76,8 +76,11 @@ class TaggableSubsciber implements EventSubscriber
             $newTagsValue = array_key_exists(1, $changes) ? $changes[1] : null;
 
             if ($oldTagsValue != $newTagsValue) {
-                $dqlDelete = "DELETE FROM ".$taggable->getEntityRelationship(
-                    )." tr WHERE tr.relatedObject = ".$taggable->getId();
+                $relatedObjectProperty = call_user_func(
+                    $taggable->getEntityRelationshipClass().'::getRelatedObjectPropertyName'
+                );
+                $dqlDelete = "DELETE FROM ".$taggable->getEntityRelationshipClass(
+                    )." tr WHERE tr.".$relatedObjectProperty." = ".$taggable->getId();
 
                 $em->createQuery($dqlDelete)->execute();
 
@@ -90,7 +93,7 @@ class TaggableSubsciber implements EventSubscriber
                         $tagRelationship = $this->createTagRelationship($tagEntity, $taggable);
 
                         $em->persist($tagRelationship);
-                        $meta = $em->getClassMetadata($taggable->getEntityRelationship());
+                        $meta = $em->getClassMetadata($taggable->getEntityRelationshipClass());
 
                         if ($uow->isInIdentityMap($tagRelationship)) {
                             $uow->recomputeSingleEntityChangeSet($meta, $tagRelationship);
@@ -106,7 +109,7 @@ class TaggableSubsciber implements EventSubscriber
 
     private function createTagRelationship(ITag $tag, ITaggable $taggable): ITagRelationship
     {
-        $refClass = new \ReflectionClass($taggable->getEntityRelationship());
+        $refClass = new \ReflectionClass($taggable->getEntityRelationshipClass());
 
         /** @var ITagRelationship $tagRelationship */
         $tagRelationship = $refClass->newInstanceWithoutConstructor();

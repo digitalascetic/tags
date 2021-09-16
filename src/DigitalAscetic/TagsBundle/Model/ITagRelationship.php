@@ -15,4 +15,7 @@ interface ITagRelationship
 
     /** @param ITaggable */
     public function setRelatedObject(ITaggable $taggable): void;
+
+    /** @return string */
+    public static function getRelatedObjectPropertyName(): string;
 }
