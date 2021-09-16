@@ -85,5 +85,6 @@ class TagRelationshipTest extends BaseTagTest
 
         $this->assertNotEmpty($results);
         $this->assertEquals(1, count($results));
+        $this->assertEquals($taggable1->getId(), $results[0]->getId());
     }
 }
