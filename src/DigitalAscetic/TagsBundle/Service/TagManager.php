@@ -5,8 +5,6 @@ namespace DigitalAscetic\TagsBundle\Service;
 use DigitalAscetic\TagsBundle\Model\ITag;
 use DigitalAscetic\TagsBundle\Model\ITaggable;
 use DigitalAscetic\TagsBundle\Model\ITagRelationship;
-use DigitalAscetic\TagsBundle\Model\TaggableQueryResult;
-use DigitalAscetic\TagsBundle\Model\TagQueryResult;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TagManager implements TagManagerInterface
@@ -44,21 +42,6 @@ class TagManager implements TagManagerInterface
 
         $this->em->persist($taggable);
         $this->em->flush();
-    }
-
-    public function findByTag(ITag $tag, string $relationship): TagQueryResult
-    {
-        $options = ['tag' => $tag];
-
-        if (isset($category)) {
-            $options['objectClass'] = $category;
-        }
-
-        $results = $this->em->getRepository($relationship)->findBy(['tag' => $tag]);
-
-        $result = new TagQueryResult(count($results));
-
-        return $result;
     }
 
     private function addTagRelationship(ITaggable $taggable, ITag $tag)

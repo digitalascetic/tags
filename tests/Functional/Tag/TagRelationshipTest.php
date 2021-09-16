@@ -5,6 +5,7 @@ namespace DigitalAscetic\TagsBundle\Test\Functional\Tag;
 use DigitalAscetic\TagsBundle\Model\ITagRelationship;
 use DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity;
 use DigitalAscetic\TagsBundle\Test\Entity\TaggableRelationship;
+use Doctrine\ORM\QueryBuilder;
 
 class TagRelationshipTest extends BaseTagTest
 {
@@ -73,14 +74,16 @@ class TagRelationshipTest extends BaseTagTest
         $this->tagManager->packTags($taggable1, [$tag1, $tag2]);
         $this->tagManager->packTags($taggable2, [$tag2]);
 
-        $resultTag1 = $this->tagManager->findByTag($tag1, TaggableRelationship::class);
+        /** @var QueryBuilder $qb */
+        $qb = $this->em->getRepository(TaggableEntity::class)->createQueryBuilder('t');
+        $qb->leftJoin(TaggableRelationship::class, 'tr', 'WITH', 't.id = tr.objectRelated')
+            ->where('tr.tag = :tag')
+            ->setParameter('tag', $tag1)
+            ->addGroupBy('t.id');
 
-        $this->assertNotEmpty($resultTag1);
-        $this->assertEquals(1, $resultTag1->getTotal());
+        $results = $qb->getQuery()->getResult();
 
-        $resultTag2 = $this->tagManager->findByTag($tag2, TaggableRelationship::class);
-
-        $this->assertNotEmpty($resultTag2);
-        $this->assertEquals(2, $resultTag2->getTotal());
+        $this->assertNotEmpty($results);
+        $this->assertEquals(1, count($results));
     }
 }
