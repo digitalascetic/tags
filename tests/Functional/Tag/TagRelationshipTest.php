@@ -9,6 +9,16 @@ use Doctrine\ORM\QueryBuilder;
 
 class TagRelationshipTest extends BaseTagTest
 {
+    public function testTagRelationshipsClassMappings()
+    {
+        $this->assertNotEmpty($this->tagService->getTagRelationshipClassNames());
+        $this->assertEquals(2, count($this->tagService->getTagRelationshipClassNames()));
+        $this->assertEquals(
+            'DigitalAscetic\\TagsBundle\\Test\\Entity\\TaggableRelationship',
+            $this->tagService->getTagRelationshipClassNames()[0]
+        );
+    }
+
     public function testAddTagRelation()
     {
         $tag = $this->createTag('Tag1');
