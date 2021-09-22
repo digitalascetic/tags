@@ -1,5 +1,9 @@
 # CHANGELOG
 
+2.2.1
+-----
+* Revert last version.
+
 2.2.0
 -----
 * TagService stores classes implementing ITagRelationship interface. Useful to query over all classes.
