@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="tags_custom")
  * @ORM\Entity()
  */
+#[ORM\Table(name: "tags_custom")]
+#[ORM\Entity]
 class TagCustom implements ITag
 {
     use TagTrait;
@@ -22,7 +24,10 @@ class TagCustom implements ITag
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column]
+    protected ?int $id = null;
 
     /**
      * @param string $tagName
@@ -35,9 +40,9 @@ class TagCustom implements ITag
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

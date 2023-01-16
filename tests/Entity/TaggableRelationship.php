@@ -21,6 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="taggable_relationship")
  * @ORM\Entity()
  */
+#[ORM\Table(name: "taggable_relationship")]
+#[ORM\Entity]
 class TaggableRelationship implements ITagRelationship
 {
 
@@ -31,21 +33,28 @@ class TaggableRelationship implements ITagRelationship
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column]
+    protected ?int $id = null;
 
     /**
      * @var Tag $tag
      * @ORM\ManyToOne (targetEntity="DigitalAscetic\TagsBundle\Test\Entity\Tag")
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", nullable=false)
      */
-    private $tag;
+    #[ORM\ManyToOne(targetEntity: "DigitalAscetic\TagsBundle\Test\Entity\Tag")]
+    #[ORM\JoinColumn(name: "tag_id", referencedColumnName: "id", nullable: false)]
+    private Tag $tag;
 
     /**
      * @var TaggableEntity $objectRelated
      * @ORM\ManyToOne (targetEntity="DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity")
      * @ORM\JoinColumn(name="taggable_id", referencedColumnName="id", nullable=false)
      */
-    private $relatedObject;
+    #[ORM\ManyToOne(targetEntity: "DigitalAscetic\TagsBundle\Test\Entity\TaggableEntity")]
+    #[ORM\JoinColumn(name: "taggable_id", referencedColumnName: "id", nullable: false)]
+    private TaggableEntity $relatedObject;
 
     /**
      * @param Tag $tag
@@ -58,9 +67,9 @@ class TaggableRelationship implements ITagRelationship
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -2,7 +2,7 @@
 
 namespace DigitalAscetic\TagsBundle\DependencyInjection;
 
-use DigitalAscetic\TagsBundle\EventSubscriber\TaggableSubsciber;
+use DigitalAscetic\TagsBundle\EventSubscriber\TaggableSubscriber;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -15,11 +15,11 @@ class DigitalAsceticTagsExtension extends Extension implements PrependExtensionI
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         if ($config['enabled']) {
-            $taggableSubscriber = new Definition(TaggableSubsciber::class);
+            $taggableSubscriber = new Definition(TaggableSubscriber::class);
             $taggableSubscriber->addArgument($config);
             $taggableSubscriber->addTag('doctrine.event_subscriber');
-            $container->setDefinition(TaggableSubsciber::SERVICE_NAME, $taggableSubscriber);
-            $container->setAlias(TaggableSubsciber::class, TaggableSubsciber::SERVICE_NAME);
+            $container->setDefinition(TaggableSubscriber::SERVICE_NAME, $taggableSubscriber);
+            $container->setAlias(TaggableSubscriber::class, TaggableSubscriber::SERVICE_NAME);
         }
     }
 

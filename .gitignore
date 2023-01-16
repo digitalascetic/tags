@@ -5,3 +5,4 @@ vendor
 package.zip
 /.phpunit.result.cache
 *.log
+/var

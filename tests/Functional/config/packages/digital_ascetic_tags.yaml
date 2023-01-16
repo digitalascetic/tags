@@ -1,0 +1,3 @@
+digital_ascetic_tags:
+  enabled: true
+  default_tag: DigitalAscetic\TagsBundle\Test\Entity\Tag

@@ -11,14 +11,16 @@ trait TagTrait
      *
      * @ORM\Column(name="tag_name", type="string", nullable=false)
      */
-    protected $tagName;
+    #[ORM\Column(name: "tag_name", type: "string", nullable: false)]
+    protected string $tagName;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="category", type="string", nullable=true)
      */
-    protected $category;
+    #[ORM\Column(name: "category", type: "string", nullable: true)]
+    protected ?string $category = null;
 
     /**
      * @return string

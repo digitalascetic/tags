@@ -21,6 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="taggable_tag_relationship")
  * @ORM\Entity()
  */
+#[ORM\Table(name: "taggable_tag_relationship")]
+#[ORM\Entity]
 class TaggableTagRelationship implements ITagRelationship
 {
 
@@ -31,21 +33,28 @@ class TaggableTagRelationship implements ITagRelationship
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column]
+    private ?int $id = null;
 
     /**
      * @var TagCustom $tag
      * @ORM\ManyToOne (targetEntity="DigitalAscetic\TagsBundle\Test\Entity\TagCustom")
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", nullable=false)
      */
-    private $tag;
+    #[ORM\ManyToOne(targetEntity: "DigitalAscetic\TagsBundle\Test\Entity\TagCustom")]
+    #[ORM\JoinColumn(name: "tag_id", referencedColumnName: "id", nullable: false)]
+    private TagCustom $tag;
 
     /**
-     * @var TaggableTagEntity $objectRelated
+     * @var TaggableTagEntity $relatedObject
      * @ORM\ManyToOne (targetEntity="DigitalAscetic\TagsBundle\Test\Entity\TaggableTagEntity")
      * @ORM\JoinColumn(name="taggable_id", referencedColumnName="id", nullable=false)
      */
-    private $relatedObject;
+    #[ORM\ManyToOne(targetEntity: "DigitalAscetic\TagsBundle\Test\Entity\TaggableTagEntity")]
+    #[ORM\JoinColumn(name: "taggable_id", referencedColumnName: "id", nullable: false)]
+    private TaggableTagEntity $relatedObject;
 
     /**
      * @param TagCustom $tag

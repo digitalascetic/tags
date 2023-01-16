@@ -11,7 +11,8 @@ trait TaggableTrait
      * @var string|null
      * @ORM\Column(name="tags", type="text", nullable=true)
      */
-    protected $tags;
+    #[ORM\Column(name: "tags", type: "text", nullable: true)]
+    protected ?string $tags = null;
 
     public function getIdTags(): array
     {

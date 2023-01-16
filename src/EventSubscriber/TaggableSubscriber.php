@@ -8,11 +8,11 @@ use DigitalAscetic\TagsBundle\Model\ITaggableTag;
 use DigitalAscetic\TagsBundle\Model\ITagRelationship;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 
-class TaggableSubsciber implements EventSubscriber
+class TaggableSubscriber implements EventSubscriber
 {
     const SERVICE_NAME = 'ascetic.tags.taggable.subscriber';
 
@@ -38,12 +38,12 @@ class TaggableSubsciber implements EventSubscriber
 
     public function postPersist(LifecycleEventArgs $args)
     {
-        if ($this->isTaggable($args->getEntity())) {
-            $em = $args->getEntityManager();
+        if ($this->isTaggable($args->getObject())) {
+            $em = $args->getObjectManager();
             $uow = $em->getUnitOfWork();
 
             /** @var ITaggable $taggable */
-            $taggable = $args->getEntity();
+            $taggable = $args->getObject();
             $idTags = $taggable->getIdTags();
 
             foreach ($idTags as $idTag) {
@@ -60,17 +60,17 @@ class TaggableSubsciber implements EventSubscriber
 
     public function preRemove(LifecycleEventArgs $args)
     {
-        if ($this->isTaggable($args->getEntity())) {
-            $em = $args->getEntityManager();
+        if ($this->isTaggable($args->getObject())) {
+            $em = $args->getObjectManager();
             /** @var ITaggable $taggable */
-            $taggable = $args->getEntity();
+            $taggable = $args->getObject();
             $this->removeTagRelationship($taggable, $em);
         }
     }
 
     public function onFlush(OnFlushEventArgs $args)
     {
-        $em = $args->getEntityManager();
+        $em = $args->getObjectManager();
         $uow = $em->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityUpdates() as $entity) {

@@ -21,6 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="taggable_tag")
  * @ORM\Entity()
  */
+#[ORM\Table(name: "taggable_tag")]
+#[ORM\Entity]
 class TaggableTagEntity implements ITaggable, ITaggableTag
 {
     use TaggableTrait;
@@ -32,12 +34,15 @@ class TaggableTagEntity implements ITaggable, ITaggableTag
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column]
+    protected ?int $id = null;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+6.2.0
+-----
+* Symfony 6.2 compatibility.
+
 2.2.1
 -----
 * Revert last version.
