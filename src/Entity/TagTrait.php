@@ -9,7 +9,6 @@ trait TagTrait
     /**
      * @var string
      *
-     * @ORM\Column(name="tag_name", type="string", nullable=false)
      */
     #[ORM\Column(name: "tag_name", type: "string", nullable: false)]
     protected string $tagName;
@@ -17,7 +16,6 @@ trait TagTrait
     /**
      * @var string|null
      *
-     * @ORM\Column(name="category", type="string", nullable=true)
      */
     #[ORM\Column(name: "category", type: "string", nullable: true)]
     protected ?string $category = null;
